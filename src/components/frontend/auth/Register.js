@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import swal from 'sweetalert';
+import { useHistory } from "react-router";
 
-import api from "../../../services/auth/RegisterService";
 import Navbar from "../../../layouts/frontend/Navbar";
 
 function Register() {
 
+    const history = useHistory();
     const [registerInput, setRegisterInput] = useState({
         name: '',
         email: '',
         password: '',
-        passwordConfirm: ''
+        passwordConfirm: '',
+        errorList: []
     });
-    const [errorRegister, setErrorRegister] = useState([]);
 
     const handleInput = (e) => {
         e.persist();
@@ -30,13 +32,20 @@ function Register() {
             passwordConfirm: registerInput.passwordConfirm,
         }
 
-        const response = api.store(data);
+        axios.get('/sanctum/csrf-cookie').then(response => {
+            axios.post('/api/register', data)
+                .then(res => {
+                    if (res.data.status === 200) {
+                        localStorage.setItem('auth_token', res.data.token);
+                        localStorage.setItem('auth_name', res.data.username);
+                        swal("Success: ", res.data.message, "success");
+                        history.push('/');
 
-        if (response.status === true) {
-            console.log(response);
-        } else {
-            setErrorRegister(response);
-        }
+                    } else {
+                        setRegisterInput({ ...registerInput, errorList: res.data.validation_errors })
+                    }
+                })
+        })
     }
 
     return (
@@ -57,24 +66,28 @@ function Register() {
                                                         <div className="form-floating mb-3 mb-md-0">
                                                             <input onChange={handleInput} value={registerInput.name} className="form-control" name="name" id="name" type="text" placeholder="Enter your first name" />
                                                             <label htmlFor="name">Name</label>
+                                                            <span className='text-danger'>{registerInput.errorList.name || ''}</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="form-floating mb-3">
                                                     <input onChange={handleInput} value={registerInput.email} className="form-control" name="email" id="email" type="email" placeholder="name@example.com" />
                                                     <label htmlFor="email">Email address</label>
+                                                    <span className='text-danger'>{registerInput.errorList.email}</span>
                                                 </div>
                                                 <div className="row mb-3">
                                                     <div className="col-md-6">
                                                         <div className="form-floating mb-3 mb-md-0">
                                                             <input onChange={handleInput} value={registerInput.password} className="form-control" name="password" id="password" type="password" placeholder="Create a password" />
                                                             <label htmlFor="password">Password</label>
+                                                            <span className='text-danger'>{registerInput.errorList.password}</span>
                                                         </div>
                                                     </div>
                                                     <div className="col-md-6">
                                                         <div className="form-floating mb-3 mb-md-0">
                                                             <input onChange={handleInput} value={registerInput.passwordConfirm} className="form-control" name="passwordConfirm" id="passwordConfirm" type="password" placeholder="Confirm password" />
                                                             <label htmlFor="password_confirm">Confirm Password</label>
+                                                            <span className='text-danger'>{registerInput.errorList.passwordConfirm}</span>
                                                         </div>
                                                     </div>
                                                 </div>
