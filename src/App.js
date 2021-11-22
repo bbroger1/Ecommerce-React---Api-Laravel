@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 import MasterLayout from "./layouts/admin/MasterLayout";
 import Home from "./components/frontend/Home";
@@ -22,8 +22,14 @@ function App() {
 		<BrowserRouter>
 			<Switch>
 				<Route exact path="/" component={Home} />
-				<Route exact path="/login" component={Login} />
-				<Route exact path="/register" component={Register} />
+
+				<Route path="/login">
+					{localStorage.getItem('auth_token') ? <Redirect to='/' /> : <Login />}
+				</Route>
+
+				<Route path="/register">
+					{localStorage.getItem('auth_token') ? <Redirect to='/' /> : <Register />}
+				</Route>
 
 				<Route path="/admin" name="Admin" render={(props) => <MasterLayout {...props} />} />
 
