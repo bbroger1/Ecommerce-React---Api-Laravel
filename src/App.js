@@ -10,6 +10,11 @@ import Register from "./components/frontend/auth/Register";
 axios.defaults.baseURL = "http://ecommerce_react.test";
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.post['Accept'] = 'application/json';
+axios.interceptors.request.use(function (config) {
+	const token = localStorage.getItem('auth_token');
+	config.headers.Authorization = token ? `Bearer ${token}` : '';
+	return config;
+})
 axios.defaults.withCredentials = true;
 
 function App() {

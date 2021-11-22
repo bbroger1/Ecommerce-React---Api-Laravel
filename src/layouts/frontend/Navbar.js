@@ -1,7 +1,51 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import swal from "sweetalert";
+import { useHistory } from "react-router";
 
 function Navbar() {
+
+    const history = useHistory();
+    var authButtons = '';
+
+    const logoutSubmit = (e) => {
+        e.preventDefault();
+
+        axios.get('/sanctum/csrf-cookie').then(response => {
+            axios.post('/api/logout')
+                .then(res => {
+                    if (res.data.status === 200) {
+                        localStorage.removeItem('auth_token');
+                        localStorage.removeItem('auth_name');
+                        swal("Success: ", res.data.message, "success");
+                        history.push('/');
+                    }
+                })
+        })
+    }
+
+    if (!localStorage.getItem('auth_token')) {
+        authButtons = (
+            <>
+                <li className="nav-item">
+                    <Link className="nav-link" to="/login">Login</Link>
+                </li>
+                <li className="nav-item">
+                    <Link className="nav-link" to="/register">Register</Link>
+                </li>
+            </>
+        )
+    } else {
+        authButtons = (
+            <>
+                <li className="nav-item">
+                    <button onClick={logoutSubmit} type="button" className="nav-link btn btn-sm btn-danger text-white">Logout</button>
+                </li>
+            </>
+        )
+    }
+
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow sticky-top">
             <div className="container">
@@ -19,16 +63,11 @@ function Navbar() {
                         <li className="nav-item">
                             <Link className="nav-link" to="#">Collection</Link>
                         </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/login">Login</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/register">Register</Link>
-                        </li>
+                        {authButtons}
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav >
     )
 }
 
