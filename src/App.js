@@ -6,6 +6,7 @@ import MasterLayout from "./layouts/admin/MasterLayout";
 import Home from "./components/frontend/Home";
 import Login from "./components/frontend/auth/Login";
 import Register from "./components/frontend/auth/Register";
+import AdminPrivateRoute from "./AdminPrivateRoute";
 
 axios.defaults.baseURL = "http://ecommerce_react.test";
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -31,7 +32,8 @@ function App() {
 					{localStorage.getItem('auth_token') ? <Redirect to='/' /> : <Register />}
 				</Route>
 
-				<Route path="/admin" name="Admin" render={(props) => <MasterLayout {...props} />} />
+				{/*<Route path="/admin" name="Admin" render={(props) => <MasterLayout {...props} />} />*/}
+				<AdminPrivateRoute path="/admin" name="Admin" />
 
 			</Switch>
 		</BrowserRouter>
