@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
-import MasterLayout from "./layouts/admin/MasterLayout";
 import Home from "./components/frontend/Home";
 import Login from "./components/frontend/auth/Login";
 import Register from "./components/frontend/auth/Register";
@@ -32,7 +31,6 @@ function App() {
 					{localStorage.getItem('auth_token') ? <Redirect to='/' /> : <Register />}
 				</Route>
 
-				{/*<Route path="/admin" name="Admin" render={(props) => <MasterLayout {...props} />} />*/}
 				<AdminPrivateRoute path="/admin" name="Admin" />
 
 			</Switch>

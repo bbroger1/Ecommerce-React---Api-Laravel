@@ -17,6 +17,11 @@ const Sidebar = () => {
                         Profile
                     </Link>
 
+                    <Link className="nav-link" to="/admin/category">
+                        <div className="sb-nav-link-icon"><i className="fab fa-buffer"></i></div>
+                        Category
+                    </Link>
+
                     <Link className="nav-link" to="/admin/add-category">
                         <div className="sb-nav-link-icon"><i className="fab fa-buffer"></i></div>
                         Add Category
