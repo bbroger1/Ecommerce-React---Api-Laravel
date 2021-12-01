@@ -4,21 +4,20 @@ import axios from "axios";
 import swal from "sweetalert";
 import Modal from "./Modal";
 
-function ViewCategory() {
+function ViewProduct() {
 
     const [loading, setLoading] = useState(true);
-    const [categoryList, setCategoryList] = useState([]);
-    const [categoryModal, setCategoryModal] = useState(false);
+    const [productList, setProductList] = useState([]);
+    const [productModal, setProductModal] = useState(false);
     const [tempData, setTempData] = useState([]);
 
     useEffect(() => {
 
-        axios.post(`/api/view-category`)
+        axios.post(`/api/view-product`)
             .then(res => {
                 if (res.status === 200) {
-                    setCategoryList(res.data.data);
+                    setProductList(res.data.products);
                 }
-
                 setLoading(false);
             })
             .catch(res => {
@@ -26,50 +25,52 @@ function ViewCategory() {
             })
     }, []);
 
-    const modalDeleteCategory = (categoryName, id) => {
-        let tempData = [categoryName, id];
+    const modalDeleteProduct = (productName, id) => {
+        let tempData = [productName, id];
         setTempData(item => [...tempData]);
-        return setCategoryModal(true);
+        return setProductModal(true);
     }
 
-    const deleteCategory = (e, id) => {
+    const deleteProduct = (e, id) => {
         e.preventDefault();
 
-        axios.delete(`/api/delete-category/${id}`)
+        axios.delete(`/api/delete-product/${id}`)
             .then(res => {
                 if (res.data.status === 200) {
                     swal("Success", res.data.message, "success");
                     document.getElementById(id).closest("tr").remove();
                 }
-                setCategoryModal(false);
+                setProductModal(false);
             }).catch(error => {
                 swal("Error", error.message, "error");
             })
     }
 
-    var viewCategory_HTMLTABLE = "";
+    var viewProduct_HTMLTABLE = "";
     if (loading) {
-        return <h3>Loading Category</h3>;
+        return <h3>Loading Product</h3>;
     } else {
-        viewCategory_HTMLTABLE =
-            categoryList.map((item) => {
+        viewProduct_HTMLTABLE =
+            productList.map((item) => {
                 return (
                     <tr key={item.id} id={item.id}>
                         <td>{item.id}</td>
+                        <td><img src={`http://ecommerce_react.test/${item.image}`} width="50" height="50" alt={item.name}></img></td>
                         <td>{item.name}</td>
-                        <td>{item.slug}</td>
+                        <td>{item.category.name}</td>
+                        <td>{item.selling_price}</td>
                         <td className="text-center">
                             {item.status === 1 ? 'Show' : 'Hidden'}
                         </td>
                         <td className="text-center">
-                            <Link to={`edit-category/${item.id}`} className="btn btn-primary btn-sm me-3">Edit</Link>
+                            <Link to={`edit-product/${item.id}`} className="btn btn-primary btn-sm me-3">Edit</Link>
                             <button
-                                onClick={() => modalDeleteCategory(item.name, item.id)}
+                                onClick={() => modalDeleteProduct(item.name, item.id)}
                                 className="btn btn-danger btn-sm">
                                 Delete
                             </button>
                         </td>
-                    </tr>
+                    </tr >
                 )
             })
     }
@@ -78,8 +79,8 @@ function ViewCategory() {
         <div className="container px-4">
             <div className="card mt-4">
                 <div className="card-header">
-                    <h3>Category List
-                        <Link to="/admin/add-category" className="btn btn-primary btn-sm float-end">Add Category</Link>
+                    <h3>Product List
+                        <Link to="/admin/add-product" className="btn btn-primary btn-sm float-end">Add Product</Link>
                     </h3>
                 </div>
                 <div className="card-body">
@@ -87,28 +88,30 @@ function ViewCategory() {
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
+                                <th scope="col">Image</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">Slug</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Selling Price</th>
                                 <th scope="col" className="text-center">Status</th>
                                 <th scope="col" className="text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {viewCategory_HTMLTABLE}
+                            {viewProduct_HTMLTABLE}
                         </tbody>
                     </table>
                 </div>
             </div>
-            {categoryModal === true ?
+            {productModal === true ?
                 <Modal
-                    categoryName={tempData[0]}
+                    productName={tempData[0]}
                     id={tempData[1]}
-                    deleteCategory={(e) => deleteCategory(e, tempData[1])}
-                    hide={() => setCategoryModal(false)}
+                    deleteProduct={(e) => deleteProduct(e, tempData[1])}
+                    hide={() => setProductModal(false)}
                 /> : ''}
         </div>
     )
 
 }
 
-export default ViewCategory;
+export default ViewProduct;
