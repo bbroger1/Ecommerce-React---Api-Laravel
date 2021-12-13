@@ -129,6 +129,9 @@ function EditProduct(props) {
             productInput.errorList.category_id,
             productInput.errorList.slug,
             productInput.errorList.name,
+            productInput.errorList.meta_title,
+            productInput.errorList.meta_keyword,
+            productInput.errorList.meta_description,
             productInput.errorList.selling_price,
             productInput.errorList.original_price,
             productInput.errorList.quantity,
@@ -220,7 +223,7 @@ function EditProduct(props) {
                                 <div className="row">
                                     <div className="col-md-2 col-sm-12 form-group mb-3">
                                         <input type="hidden" name="old_image" id="old_image" value={productInput.image} className="form-control" />
-                                        <img src={`http://ecommerce_react.test/${productInput.image}`} width="50" alt={productInput.image}></img>
+                                        <img src={`http://ecommerce_react.test/${productInput.image}`} width="50" height="50" alt={productInput.image}></img>
                                     </div>
 
                                     <div className="col-md-10 col-sm-12 form-group mb-3">
