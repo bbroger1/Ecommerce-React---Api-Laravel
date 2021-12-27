@@ -2,7 +2,8 @@ import React from "react";
 import axios from "axios";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
-import Home from "./components/frontend/Home";
+import PublicRoute from "./PublicRoute";
+
 import Login from "./components/frontend/auth/Login";
 import Register from "./components/frontend/auth/Register";
 import AdminPrivateRoute from "./AdminPrivateRoute";
@@ -21,7 +22,13 @@ function App() {
 	return (
 		<BrowserRouter>
 			<Switch>
-				<Route exact path="/" component={Home} />
+				{/*<Route exact path="/" component={Home} />
+				<Route path="/about" component={About} />
+				<Route path="/contact" component={Contact} />*/}
+
+				<AdminPrivateRoute path="/admin" name="Admin" />
+
+				<PublicRoute path="/" name="Home" />
 
 				<Route path="/login">
 					{localStorage.getItem('auth_token') ? <Redirect to='/' /> : <Login />}
@@ -30,8 +37,6 @@ function App() {
 				<Route path="/register">
 					{localStorage.getItem('auth_token') ? <Redirect to='/' /> : <Register />}
 				</Route>
-
-				<AdminPrivateRoute path="/admin" name="Admin" />
 
 			</Switch>
 		</BrowserRouter>

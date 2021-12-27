@@ -81,6 +81,10 @@ function EditCategory(props) {
         display_errors = [
             errorList.slug,
             errorList.name,
+            errorList.meta_title,
+            errorList.meta_description,
+            errorList.meta_keyword,
+
         ]
     }
 

@@ -4,8 +4,6 @@ import axios from "axios";
 import swal from 'sweetalert';
 import { useHistory } from "react-router";
 
-import Navbar from "../../../layouts/frontend/Navbar";
-
 function Register() {
 
     const history = useHistory();
@@ -50,7 +48,6 @@ function Register() {
 
     return (
         <div>
-            <Navbar />
             <div id="layoutAuthentication">
                 <div id="layoutAuthentication_content">
                     <main>

@@ -8,8 +8,8 @@ const Paginator = ({ pagination, pageChanged, totalItems }) => {
 
     useEffect(() => {
         const setPaginationPages = () => {
-            let pages = []
-            const { last_page, current_page, to } = pagination
+            let pages = [];
+            const { last_page, current_page, to } = pagination;
             if (!to) return []
             let fromPage = current_page - OFFSET
             if (fromPage < 1) fromPage = 1

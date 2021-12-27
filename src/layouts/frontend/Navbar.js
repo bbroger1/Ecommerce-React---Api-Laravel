@@ -1,12 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import axios from "axios";
 import swal from "sweetalert";
 import { useHistory } from "react-router";
+import "./StyleNavbar.css";
 
 function Navbar() {
 
     const history = useHistory();
+
     var authButtons = '';
 
     const logoutSubmit = (e) => {
@@ -49,7 +51,7 @@ function Navbar() {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow sticky-top">
             <div className="container">
-                <Link className="navbar-brand" to="#">Logo</Link>
+                <Link className="navbar-brand" to="/">Logo</Link>
 
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
@@ -58,11 +60,29 @@ function Navbar() {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <Link className="nav-link active" aria-current="page" to="/">Home</Link>
+                            <NavLink className="nav-link" to='/' activeClassName="active" >
+                                Home
+                            </NavLink>
                         </li>
+
                         <li className="nav-item">
-                            <Link className="nav-link" to="#">Collection</Link>
+                            <NavLink className="nav-link" to='/about' activeClassName="active" >
+                                About
+                            </NavLink>
                         </li>
+
+                        <li className="nav-item">
+                            <NavLink className="nav-link" to='/contact' activeClassName="active" >
+                                Contact
+                            </NavLink>
+                        </li>
+
+                        <li className="nav-item">
+                            <NavLink className="nav-link" to='/collection' activeClassName="active" >
+                                Collection
+                            </NavLink>
+                        </li>
+
                         {authButtons}
                     </ul>
                 </div>

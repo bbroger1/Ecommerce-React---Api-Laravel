@@ -20,7 +20,7 @@ const DataTable = ({ columns, fetchUrl }) => {
 
     const [loading, setLoading] = useState(true)
 
-    const [productModal, setProductModal] = useState(false);
+    const [categoryModal, setCategoryModal] = useState(false);
     const [tempData, setTempData] = useState([]);
 
     const handleSort = (column) => {
@@ -69,22 +69,22 @@ const DataTable = ({ columns, fetchUrl }) => {
         fetchData()
     }, [perPage, sortColumn, sortOrder, search, currentPage, fetchUrl])
 
-    const modalDeleteProduct = (productName, id) => {
-        let tempData = [productName, id];
+    const modalDeleteCategory = (categoryName, id) => {
+        let tempData = [categoryName, id];
         setTempData(item => [...tempData]);
-        return setProductModal(true);
+        return setCategoryModal(true);
     }
 
-    const deleteProduct = (e, id) => {
+    const deleteCategory = (e, id) => {
         e.preventDefault();
 
-        axios.delete(`/api/delete-product/${id}`)
+        axios.delete(`/api/delete-category/${id}`)
             .then(res => {
                 if (res.data.status === 200) {
                     swal("Success", res.data.message, "success");
                     document.getElementById(id).closest("tr").remove();
                 }
-                setProductModal(false);
+                setCategoryModal(false);
             }).catch(error => {
                 swal("Error", error.message, "error");
             })
@@ -152,17 +152,15 @@ const DataTable = ({ columns, fetchUrl }) => {
                                 return (
                                     <tr key={index} id={item.id}>
                                         <td className="text-center">{item.id}</td>
-                                        <td className="text-center"><img src={`http://ecommerce_react.test/${item.image}`} width="50" height="50" alt={item.name}></img></td>
                                         <td className="text-center">{item.name}</td>
-                                        <td className="text-center">{item.category}</td>
-                                        <td className="text-center">{item.selling_price}</td>
+                                        <td className="text-center">{item.slug}</td>
                                         <td className="text-center">
                                             {item.status === 1 ? 'Show' : 'Hidden'}
                                         </td>
                                         <td className="text-center">
-                                            <Link to={`edit-product/${item.id}`} className="btn btn-primary btn-sm me-3">Edit</Link>
+                                            <Link to={`edit-category/${item.id}`} className="btn btn-primary btn-sm me-3">Edit</Link>
                                             <button
-                                                onClick={() => modalDeleteProduct(item.name, item.id)}
+                                                onClick={() => modalDeleteCategory(item.name, item.id)}
                                                 className="btn btn-danger btn-sm">
                                                 Delete
                                             </button>
@@ -195,12 +193,12 @@ const DataTable = ({ columns, fetchUrl }) => {
                 </div>
             ) : null}
             {
-                productModal === true ?
+                categoryModal === true ?
                     <Modal
-                        productName={tempData[0]}
+                        categoryName={tempData[0]}
                         id={tempData[1]}
-                        deleteProduct={(e) => deleteProduct(e, tempData[1])}
-                        hide={() => setProductModal(false)}
+                        deleteCategory={(e) => deleteCategory(e, tempData[1])}
+                        hide={() => setCategoryModal(false)}
                     /> : ''}
         </div>
     )
