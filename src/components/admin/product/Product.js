@@ -33,7 +33,7 @@ function Product() {
         axios.get(`/api/all-category`)
             .then(res => {
                 if (res.data.status === 200) {
-                    setSelectData(res.data.data)
+                    setSelectData(res.data.category)
                 }
             }).catch(error => {
                 console.error(error);

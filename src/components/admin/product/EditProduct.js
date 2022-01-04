@@ -5,7 +5,6 @@ import swal from "sweetalert";
 
 function EditProduct(props) {
 
-    const [errorList, setErrorList] = useState([]);
     const [loading, setLoading] = useState(true);
     const history = useHistory();
     const [productError, setProductError] = useState([]);
@@ -20,7 +19,7 @@ function EditProduct(props) {
         axios.get(`/api/all-category`)
             .then(res => {
                 if (res.data.status === 200) {
-                    setSelectData(res.data.data)
+                    setSelectData(res.data.category)
                 }
             }).catch(error => {
                 console.error(error);
@@ -53,6 +52,7 @@ function EditProduct(props) {
                 } else {
                     history.goBack();
                 }
+                setProductError()
             }).catch(error => {
                 setProductError(error.message)
             });
@@ -153,6 +153,10 @@ function EditProduct(props) {
                     {display_errors.map((item, key) => {
                         return (<p className="mb-1" key={key}>{item}</p>)
                     })}
+                </span>
+
+                <span className='text-danger'>
+                    {productError}
                 </span>
 
                 <div className="card-body">

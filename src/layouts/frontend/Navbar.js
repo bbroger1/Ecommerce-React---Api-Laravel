@@ -83,6 +83,12 @@ function Navbar() {
                             </NavLink>
                         </li>
 
+                        <li className="nav-item">
+                            <NavLink className="nav-link" to='/cart' activeClassName="active" >
+                                Cart
+                            </NavLink>
+                        </li>
+
                         {authButtons}
                     </ul>
                 </div>
