@@ -9,6 +9,7 @@ function Cart() {
     const [loading, setLoading] = useState(true);
     const [cart, setCart] = useState([]);
     const [itens, setItens] = useState([]);
+    const [totalCart, setTotalCart] = useState();
 
     useEffect(() => {
         let isMounted = true;
@@ -18,6 +19,7 @@ function Cart() {
                 if (isMounted) {
                     if (response.data.status === 200) {
                         setCart(response.data.cart);
+                        setTotalCart(response.data.cart.total);
                         setItens(response.data.items);
                     } else if (response.data.status === 204) {
                         history.push('/cart');
@@ -50,6 +52,7 @@ function Cart() {
             .then(response => {
                 if (response.data.status === 200) {
                     setCart(response.data.cart);
+                    setTotalCart(response.data.cart.total);
                     setItens([...response.data.items]);
                 } else if (response.data.status === 401) {
                     history.push('/');
@@ -57,6 +60,24 @@ function Cart() {
                 } else if (response.data.status === 404) {
                     history.push('/');
                     swal('Error', response.data.message, "error")
+                }
+            });
+    }
+
+    //deletar produto do carrinho
+    const handleDeletePurchase = (e, purchaseId) => {
+        e.preventDefault();
+
+        const thisClicked = e.currentTarget;
+        thisClicked.innerText = "Removing";
+
+        axios.delete(`/api/delete-purchase/${purchaseId}`)
+            .then(response => {
+                if (response.data.status === 200) {
+                    thisClicked.closest("tr").remove();
+                    setTotalCart(response.data.total_cart);
+                } else if (response.data.status === 404) {
+                    swal('Error', response.data.message, "error");
                 }
             });
     }
@@ -95,7 +116,8 @@ function Cart() {
                             <td className="text-center" width="10%">$ {parseFloat(item.product.selling_price) * parseInt(item.sum)}</td>
                             <td className="text-center" width="10%">
                                 <button
-                                    className="btn btn-danger btn-sm">
+                                    className="btn btn-danger btn-sm"
+                                    onClick={(e) => handleDeletePurchase(e, item.id)}>
                                     Delete
                                 </button>
                             </td>
@@ -107,7 +129,7 @@ function Cart() {
             showProductList.push(
                 <tr key={cart.id}>
                     <td colSpan="4" className="text-end"><b>Total</b></td>
-                    <td colSpan="2" className="text-center"><b>$ {cart.total}</b></td>
+                    <td colSpan="2" className="text-center" id="cart_total"><b>$ {totalCart}</b></td>
                 </tr>
             );
 
