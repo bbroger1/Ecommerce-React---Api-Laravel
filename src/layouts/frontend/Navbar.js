@@ -42,7 +42,7 @@ function Navbar() {
         authButtons = (
             <>
                 <li className="nav-item">
-                    <button onClick={logoutSubmit} type="button" className="nav-link btn btn-sm btn-danger text-white">Logout</button>
+                    <button onClick={logoutSubmit} type="button" className="nav-link btn btn-sm btn-light text-black">Logout</button>
                 </li>
             </>
         )

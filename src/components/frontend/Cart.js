@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import swal from "sweetalert";
 
 function Cart() {
@@ -10,6 +10,7 @@ function Cart() {
     const [cart, setCart] = useState([]);
     const [itens, setItens] = useState([]);
     const [totalCart, setTotalCart] = useState();
+    const [freight, setFreight] = useState(0);
 
     useEffect(() => {
         let isMounted = true;
@@ -86,9 +87,9 @@ function Cart() {
         return <h4>Loading Products...</h4>
     } else {
         var showProductList = [];
+        var showDetailsPrice = "";
 
         if (itens.length > 0) {
-
             itens.map((item, index) => {
                 return (
                     showProductList.push(
@@ -126,14 +127,46 @@ function Cart() {
                 );
             });
 
-            showProductList.push(
-                <tr key={cart.id}>
-                    <td colSpan="4" className="text-end"><b>Total</b></td>
-                    <td colSpan="2" className="text-center" id="cart_total"><b>$ {totalCart}</b></td>
-                </tr>
-            );
+            showDetailsPrice = <>
+                <div className="col-md-8">
+                    <div className="row mt-3">
+                        <div className="col-auto">
+                            <label htmlFor="zip_code">Freight Calculation:</label>
+                        </div>
+                        <div className="col-auto">
+                            <input type="text" className="form-control" id="zip_code" placeholder="00.000-000" required />
+                        </div>
+                        <div className="col-auto">
+                            <button type="submit" className="btn btn-primary mb-3">Submit</button>
+                        </div>
+                    </div>
+                </div>
 
+                <div className="col-md-4">
+                    <div className="card card-body mt-3">
+                        <h5>Sub Total:
+                            <span className="float-end">$ {totalCart}</span>
+                        </h5>
+                        <h5>Freight:
+                            <span className="float-end">$ {freight}</span>
+                        </h5>
+                        <h5>Total:
+                            <span className="float-end">$ {totalCart}</span>
+                        </h5>
+                        <hr />
+                        {
+                            freight >= 0 ?
 
+                                <Link to="/checkout" type="button" className="btn btn-success">Checkout</Link>
+                                :
+
+                                <button className="btn btn-success" disabled>Checkout</button>
+
+                        }
+
+                    </div>
+                </div>
+            </>
         } else {
             showProductList.push(
                 <tr key="1">
@@ -172,9 +205,9 @@ function Cart() {
                                         {showProductList}
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
+                        {showDetailsPrice}
                     </div>
                 </div>
             </div>

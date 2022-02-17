@@ -7,6 +7,7 @@ import Collection from "../components/frontend/collections/Collection";
 import CollectionProduct from "../components/frontend/collections/CollectionProduct";
 import ProductDetail from "../components/frontend/collections/ProductDetail";
 import Cart from "../components/frontend/Cart";
+import Checkout from "../components/frontend/Checkout";
 
 const PublicRouteList = [
     { path: '/', exact: true, name: 'home', component: Home },
@@ -18,6 +19,7 @@ const PublicRouteList = [
     { path: '/collection/:slug', exact: true, name: 'collectionProduct', component: CollectionProduct },
     { path: '/collection/:category/:product', exact: true, name: 'productDetail', component: ProductDetail },
     { path: '/cart', exact: true, name: 'cart', component: Cart },
+    { path: '/checkout', exact: true, name: 'checkout', component: Checkout },
 ];
 
 export default PublicRouteList;
